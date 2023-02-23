@@ -98,12 +98,13 @@ void LSTOutputConverter::produce(edm::StreamID, edm::Event& iEvent, const edm::E
   //auto const& bs = iEvent.get(beamSpotToken_);
 
   // Vector definitions
-  std::vector<std::vector<unsigned int>> const& lstTC_hitIdx = lstOutput.hitIdx();
-  std::vector<unsigned int> const& lstTC_len = lstOutput.len();
-  std::vector<float> const& lstTC_pt = lstOutput.pt();
-  std::vector<float> const& lstTC_eta = lstOutput.eta();
-  std::vector<float> const& lstTC_phi = lstOutput.phi();
-  std::vector<int> const& lstTC_seedIdx = lstOutput.seedIdx();
+  std::vector<std::vector<unsigned int>> const lstTC_hitIdx = lstOutput.hitIdx();
+  std::vector<unsigned int> const lstTC_len = lstOutput.len();
+  std::vector<float> const lstTC_pt = lstOutput.pt();
+  std::vector<float> const lstTC_eta = lstOutput.eta();
+  std::vector<float> const lstTC_phi = lstOutput.phi();
+  std::vector<int> const lstTC_seedIdx = lstOutput.seedIdx();
+  std::vector<short> const lstTC_trackCandidateType = lstOutput.trackCandidateType();
 
   TrackCandidateCollection output;
   output.reserve(lstTC_len.size());
@@ -115,7 +116,6 @@ void LSTOutputConverter::produce(edm::StreamID, edm::Event& iEvent, const edm::E
   LogDebug("LSTOutputConverter")<<"lstTC size "<<lstTC_len.size();
   for (unsigned int i=0; i<lstTC_len.size(); i++) {
     LogDebug("LSTOutputConverter")<<" cand "<<i<<" "<<lstTC_len[i]<<" "<<lstTC_pt[i]<<" "<<lstTC_eta[i]<<" "<<lstTC_phi[i]<<" "<<lstTC_seedIdx[i];
-
     TrajectorySeed seed;
     if (lstTC_seedIdx[i] != - 1)
       seed = pixelSeeds[lstTC_seedIdx[i]];
