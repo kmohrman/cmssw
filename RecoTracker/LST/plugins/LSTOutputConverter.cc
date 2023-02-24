@@ -98,13 +98,13 @@ void LSTOutputConverter::produce(edm::StreamID, edm::Event& iEvent, const edm::E
   //auto const& bs = iEvent.get(beamSpotToken_);
 
   // Vector definitions
-  std::vector<std::vector<unsigned int>> const lstTC_hitIdx = lstOutput.hitIdx();
-  std::vector<unsigned int> const lstTC_len = lstOutput.len();
-  std::vector<float> const lstTC_pt = lstOutput.pt();
-  std::vector<float> const lstTC_eta = lstOutput.eta();
-  std::vector<float> const lstTC_phi = lstOutput.phi();
-  std::vector<int> const lstTC_seedIdx = lstOutput.seedIdx();
-  std::vector<short> const lstTC_trackCandidateType = lstOutput.trackCandidateType();
+  std::vector<std::vector<unsigned int>> const& lstTC_hitIdx = lstOutput.hitIdx();
+  std::vector<unsigned int> const& lstTC_len = lstOutput.len();
+  std::vector<float> const& lstTC_pt = lstOutput.pt();
+  std::vector<float> const& lstTC_eta = lstOutput.eta();
+  std::vector<float> const& lstTC_phi = lstOutput.phi();
+  std::vector<int> const& lstTC_seedIdx = lstOutput.seedIdx();
+  std::vector<short> const& lstTC_trackCandidateType = lstOutput.trackCandidateType();
 
   TrackCandidateCollection output;
   output.reserve(lstTC_len.size());
