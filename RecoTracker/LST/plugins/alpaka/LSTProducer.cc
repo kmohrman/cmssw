@@ -29,6 +29,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     LSTProducer(edm::ParameterSet const& config)
         : lstPixelSeedInputToken_{consumes<LSTPixelSeedInput>(config.getParameter<edm::InputTag>("pixelSeedInput"))},
           lstPhase2OTHitsInputToken_{consumes<LSTPhase2OTHitsInput>(config.getParameter<edm::InputTag>("phase2OTHitsInput"))},
+          verbose_(config.getParameter<int>("verbose")),
           lstOutputToken_{produces<LSTOutput>()} {}
 
     void acquire(edm::Event const& event, edm::EventSetup const& setup, edm::WaitingTaskWithArenaHolder task) override {
@@ -42,6 +43,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
       lst_.eventSetup();
       lst_.run(ctx.queue().getNativeHandle(),
+               verbose_,
                pixelSeeds.px(),
                pixelSeeds.py(),
                pixelSeeds.pz(),
@@ -76,12 +78,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       edm::ParameterSetDescription desc;
       desc.add<edm::InputTag>("pixelSeedInput", edm::InputTag{"lstPixelSeedInputProducer"});
       desc.add<edm::InputTag>("phase2OTHitsInput", edm::InputTag{"lstPhase2OTHitsInputProducer"});
+      desc.add<int>("verbose", 0);
       descriptions.addWithDefaultLabel(desc);
     }
 
   private:
     edm::EDGetTokenT<LSTPixelSeedInput> lstPixelSeedInputToken_;
     edm::EDGetTokenT<LSTPhase2OTHitsInput> lstPhase2OTHitsInputToken_;
+    const int verbose_;
     edm::EDPutTokenT<LSTOutput> lstOutputToken_;
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
