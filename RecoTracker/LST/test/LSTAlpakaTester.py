@@ -85,8 +85,7 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T21', ''
 
 # Tasks and Sequences for LST inputs
 process.load("RecoTracker.LST.lst_cff")
-process.load("Validation.RecoTrack.trackingNtuple_cff")
-lstInputTask = cms.Task(process.trackingNtupleSeedSelectors,process.siPhase2RecHits)
+lstInputTask = cms.Task(process.initialStepSeedTracks,process.highPtTripletStepSeedTracks,process.siPhase2RecHits)
 lstInputSequence = cms.Sequence(lstInputTask)
 
 # Main LST Producer

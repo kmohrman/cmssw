@@ -56,7 +56,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                pixelSeeds.stateTrajGlbPy(),
                pixelSeeds.stateTrajGlbPz(),
                pixelSeeds.q(),
-               pixelSeeds.algo(),
                pixelSeeds.hitIdx(),
                phase2OTHits.detId(),
                phase2OTHits.x(),
