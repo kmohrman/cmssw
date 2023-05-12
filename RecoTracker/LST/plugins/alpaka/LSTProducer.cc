@@ -20,7 +20,7 @@
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
 #include "SDL/LST.h"
-#endif // ALPAKA_ACC_GPU_CUDA_ENABLED
+#endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
@@ -28,7 +28,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     LSTProducer(edm::ParameterSet const& config)
         : lstPixelSeedInputToken_{consumes<LSTPixelSeedInput>(config.getParameter<edm::InputTag>("pixelSeedInput"))},
-          lstPhase2OTHitsInputToken_{consumes<LSTPhase2OTHitsInput>(config.getParameter<edm::InputTag>("phase2OTHitsInput"))},
+          lstPhase2OTHitsInputToken_{
+              consumes<LSTPhase2OTHitsInput>(config.getParameter<edm::InputTag>("phase2OTHitsInput"))},
           verbose_(config.getParameter<int>("verbose")),
           lstOutputToken_{produces<LSTOutput>()} {}
 
@@ -63,14 +64,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                phase2OTHits.x(),
                phase2OTHits.y(),
                phase2OTHits.z());
-#endif // ALPAKA_ACC_GPU_CUDA_ENABLED
+#endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
     }
 
     void produce(edm::Event& event, edm::EventSetup const&) override {
       // Output
       LSTOutput lstOutput;
-      lstOutput.setLSTOutputTraits(lst_.hits(), lst_.len(), lst_.pt(), lst_.eta(), lst_.phi(), lst_.seedIdx(), lst_.trackCandidateType());
- 
+      lstOutput.setLSTOutputTraits(
+          lst_.hits(), lst_.len(), lst_.pt(), lst_.eta(), lst_.phi(), lst_.seedIdx(), lst_.trackCandidateType());
+
       event.emplace(lstOutputToken_, std::move(lstOutput));
     }
 
@@ -90,7 +92,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
     SDL::LST lst_;
-#endif // ALPAKA_ACC_GPU_CUDA_ENABLED
+#endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
   };
 
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE

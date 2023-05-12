@@ -382,12 +382,12 @@ trackingPhase2PU140.toReplaceWith(HighPtTripletStepTask, _HighPtTripletStepTask_
 
 _HighPtTripletStepTask_LST = HighPtTripletStepTask.copy()
 from RecoLocalTracker.Phase2TrackerRecHits.Phase2TrackerRecHits_cfi import siPhase2RecHits
-from RecoTracker.LST.lstSeedTracks_cfi import initialStepSeedTracks,highPtTripletStepSeedTracks
+from RecoTracker.LST.lstSeedTracks_cfi import lstInitialStepSeedTracks,lstHighPtTripletStepSeedTracks
 from RecoTracker.LST.lstPixelSeedInputProducer_cfi import lstPixelSeedInputProducer
 from RecoTracker.LST.lstPhase2OTHitsInputProducer_cfi import lstPhase2OTHitsInputProducer
 from RecoTracker.LST.alpaka_cuda_asyncLSTProducer_cfi import alpaka_cuda_asyncLSTProducer
 lstProducer = alpaka_cuda_asyncLSTProducer.clone()
-_HighPtTripletStepTask_LST.add(siPhase2RecHits, initialStepSeedTracks, highPtTripletStepSeedTracks, lstPixelSeedInputProducer, lstPhase2OTHitsInputProducer, lstProducer)
+_HighPtTripletStepTask_LST.add(siPhase2RecHits, lstInitialStepSeedTracks, lstHighPtTripletStepSeedTracks, lstPixelSeedInputProducer, lstPhase2OTHitsInputProducer, lstProducer)
 (trackingPhase2PU140 & trackingLST).toReplaceWith(HighPtTripletStepTask, _HighPtTripletStepTask_LST)
 
 # fast tracking mask producer 

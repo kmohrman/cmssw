@@ -4,12 +4,12 @@
 #include <memory>
 #include <vector>
 
-enum LSTTCType { T5=4, pT3=5, pT5=7, pLS=8 };
-
 class LSTOutput {
 public:
   LSTOutput() = default;
   ~LSTOutput() = default;
+
+  enum LSTTCType { T5 = 4, pT3 = 5, pT5 = 7, pLS = 8 };
 
   void setLSTOutputTraits(std::vector<std::vector<unsigned int>> hitIdx,
                           std::vector<unsigned int> len,
@@ -46,4 +46,3 @@ private:
 };
 
 #endif
-
