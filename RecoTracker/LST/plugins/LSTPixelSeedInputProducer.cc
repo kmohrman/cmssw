@@ -44,7 +44,6 @@ LSTPixelSeedInputProducer::LSTPixelSeedInputProducer(edm::ParameterSet const& iC
       lstPixelSeedsPutToken_(produces<TrajectorySeedCollection>()) {
   seedTokens_ = edm::vector_transform(iConfig.getUntrackedParameter<std::vector<edm::InputTag>>("seedTracks"),
                                       [&](const edm::InputTag& tag) { return consumes<edm::View<reco::Track>>(tag); });
-
 }
 
 void LSTPixelSeedInputProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
@@ -53,13 +52,12 @@ void LSTPixelSeedInputProducer::fillDescriptions(edm::ConfigurationDescriptions&
   desc.addUntracked<edm::InputTag>("beamSpot", edm::InputTag("offlineBeamSpot"));
 
   desc.addUntracked<std::vector<edm::InputTag>>(
-    "seedTracks",
-    std::vector<edm::InputTag>{edm::InputTag("seedTracksinitialStepSeeds"),
-                               edm::InputTag("seedTrackshighPtTripletStepSeeds")});
+      "seedTracks",
+      std::vector<edm::InputTag>{edm::InputTag("lstInitialStepSeedTracks"),
+                                 edm::InputTag("lstHighPtTripletStepSeedTracks")});
 
   descriptions.addWithDefaultLabel(desc);
 }
-
 
 void LSTPixelSeedInputProducer::produce(edm::StreamID iID, edm::Event& iEvent, const edm::EventSetup& iSetup) const {
   // Setup
@@ -82,7 +80,6 @@ void LSTPixelSeedInputProducer::produce(edm::StreamID iID, edm::Event& iEvent, c
   std::vector<float> see_stateTrajGlbPy;
   std::vector<float> see_stateTrajGlbPz;
   std::vector<int> see_q;
-  std::vector<unsigned int> see_algo;
   std::vector<std::vector<int>> see_hitIdx;
   TrajectorySeedCollection see_seeds;
 
@@ -94,21 +91,6 @@ void LSTPixelSeedInputProducer::produce(edm::StreamID iID, edm::Event& iEvent, c
     if (seedTracks.empty())
       continue;
 
-    // Get seed algo
-    edm::EDConsumerBase::Labels labels;
-    labelsForToken(seedToken, labels);
-
-    TString label = labels.module;
-    //format label to match algoName
-    label.ReplaceAll("seedTracks", "");
-    label.ReplaceAll("Seeds", "");
-    label.ReplaceAll("muonSeeded", "muonSeededStep");
-    //for HLT seeds // FIXME: Needed?
-    label.ReplaceAll("FromPixelTracks", "");
-    label.ReplaceAll("PFLowPixel", "");
-    label.ReplaceAll("hltDoubletRecovery", "pixelPairStep");  //random choice
-    int algo = reco::TrackBase::algoByName(label.Data());
-
     // Get seed track refs
     edm::RefToBaseVector<reco::Track> seedTrackRefs;
     for (edm::View<reco::Track>::size_type i = 0; i < seedTracks.size(); ++i) {
@@ -117,22 +99,17 @@ void LSTPixelSeedInputProducer::produce(edm::StreamID iID, edm::Event& iEvent, c
 
     edm::ProductID id = seedTracks[0].seedRef().id();
 
-    LogTrace("TrackingNtuple") << "NEW SEED LABEL: " << label << " size: " << seedTracks.size() << " algo=" << algo
-                               << " ProductID " << id;
-
     for (size_t iSeed = 0; iSeed < seedTrackRefs.size(); ++iSeed) {
       const auto& seedTrackRef = seedTrackRefs[iSeed];
       const auto& seedTrack = *seedTrackRef;
       const auto& seedRef = seedTrack.seedRef();
       const auto& seed = *seedRef;
 
-
       if (seedRef.id() != id)
         throw cms::Exception("LogicError")
             << "All tracks in 'TracksFromSeeds' collection should point to seeds in the same collection. Now the "
                "element 0 had ProductID "
-            << id << " while the element " << seedTrackRef.key() << " had " << seedTrackRef.id()
-            << ". The source collection is " << labels.module << ".";
+            << id << " while the element " << seedTrackRef.key() << " had " << seedTrackRef.id() << ".";
 
       const bool seedFitOk = !trackFromSeedFitFailed(seedTrack);
 
@@ -150,8 +127,7 @@ void LSTPixelSeedInputProducer::produce(edm::StreamID iID, edm::Event& iEvent, c
           const auto clusterKey = clusterRef.cluster_pixel().key();
           hitIdx.push_back(clusterKey);
         } else {
-          throw cms::Exception("LSTPixelSeedInputProducer")
-                << "Not pixel hits found!";
+          throw cms::Exception("LSTPixelSeedInputProducer") << "Not pixel hits found!";
         }
       }
 
@@ -170,13 +146,26 @@ void LSTPixelSeedInputProducer::produce(edm::StreamID iID, edm::Event& iEvent, c
       see_stateTrajGlbPy.push_back(stateGlobal.momentum().y());
       see_stateTrajGlbPz.push_back(stateGlobal.momentum().z());
       see_q.push_back(seedTrack.charge());
-      see_algo.push_back(algo);
       see_hitIdx.push_back(hitIdx);
       see_seeds.push_back(seed);
     }
   }
 
-  pixelSeedInput.setLSTPixelSeedTraits(see_px, see_py, see_pz, see_dxy, see_dz, see_ptErr, see_etaErr, see_stateTrajGlbX, see_stateTrajGlbY, see_stateTrajGlbZ, see_stateTrajGlbPx, see_stateTrajGlbPy, see_stateTrajGlbPz, see_q, see_algo, see_hitIdx);
+  pixelSeedInput.setLSTPixelSeedTraits(see_px,
+                                       see_py,
+                                       see_pz,
+                                       see_dxy,
+                                       see_dz,
+                                       see_ptErr,
+                                       see_etaErr,
+                                       see_stateTrajGlbX,
+                                       see_stateTrajGlbY,
+                                       see_stateTrajGlbZ,
+                                       see_stateTrajGlbPx,
+                                       see_stateTrajGlbPy,
+                                       see_stateTrajGlbPz,
+                                       see_q,
+                                       see_hitIdx);
   iEvent.emplace(lstPixelSeedInputPutToken_, std::move(pixelSeedInput));
   iEvent.emplace(lstPixelSeedsPutToken_, std::move(see_seeds));
 }

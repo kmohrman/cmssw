@@ -23,7 +23,6 @@ public:
                              std::vector<float> stateTrajGlbPy,
                              std::vector<float> stateTrajGlbPz,
                              std::vector<int> q,
-                             std::vector<unsigned int> algo,
                              std::vector<std::vector<int>> hitIdx) {
     px_ = px;
     py_ = py;
@@ -39,7 +38,6 @@ public:
     stateTrajGlbPy_ = stateTrajGlbPy;
     stateTrajGlbPz_ = stateTrajGlbPz;
     q_ = q;
-    algo_ = algo;
     hitIdx_ = hitIdx;
   }
 
@@ -57,7 +55,6 @@ public:
   std::vector<float> const& stateTrajGlbPy() const { return stateTrajGlbPy_; }
   std::vector<float> const& stateTrajGlbPz() const { return stateTrajGlbPz_; }
   std::vector<int> const& q() const { return q_; }
-  std::vector<unsigned int> const& algo() const { return algo_; }
   std::vector<std::vector<int>> const& hitIdx() const { return hitIdx_; }
 
 private:
@@ -75,9 +72,7 @@ private:
   std::vector<float> stateTrajGlbPy_;
   std::vector<float> stateTrajGlbPz_;
   std::vector<int> q_;
-  std::vector<unsigned int> algo_;
   std::vector<std::vector<int>> hitIdx_;
 };
 
 #endif
-
