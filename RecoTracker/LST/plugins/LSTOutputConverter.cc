@@ -106,9 +106,6 @@ void LSTOutputConverter::produce(edm::StreamID, edm::Event& iEvent, const edm::E
   // Vector definitions
   std::vector<std::vector<unsigned int>> const& lstTC_hitIdx = lstOutput.hitIdx();
   std::vector<unsigned int> const& lstTC_len = lstOutput.len();
-  std::vector<float> const& lstTC_pt = lstOutput.pt();
-  std::vector<float> const& lstTC_eta = lstOutput.eta();
-  std::vector<float> const& lstTC_phi = lstOutput.phi();
   std::vector<int> const& lstTC_seedIdx = lstOutput.seedIdx();
   std::vector<short> const& lstTC_trackCandidateType = lstOutput.trackCandidateType();
 
@@ -121,8 +118,7 @@ void LSTOutputConverter::produce(edm::StreamID, edm::Event& iEvent, const edm::E
 
   LogDebug("LSTOutputConverter") << "lstTC size " << lstTC_len.size();
   for (unsigned int i = 0; i < lstTC_len.size(); i++) {
-    LogDebug("LSTOutputConverter") << " cand " << i << " " << lstTC_len[i] << " " << lstTC_pt[i] << " " << lstTC_eta[i]
-                                   << " " << lstTC_phi[i] << " " << lstTC_seedIdx[i];
+    LogDebug("LSTOutputConverter") << " cand " << i << " " << lstTC_len[i] << " " << lstTC_seedIdx[i];
     TrajectorySeed seed;
     if (lstTC_trackCandidateType[i] != LSTOutput::LSTTCType::T5)
       seed = pixelSeeds[lstTC_seedIdx[i]];
@@ -177,8 +173,7 @@ void LSTOutputConverter::produce(edm::StreamID, edm::Event& iEvent, const edm::E
       seedCreator_->makeSeed(seeds, hitsForSeed);
       if (seeds.empty()) {
         edm::LogInfo("LSTOutputConverter")
-            << "failed to convert a LST object to a seed" << i << " " << lstTC_len[i] << " " << lstTC_pt[i] << " "
-            << lstTC_eta[i] << " " << lstTC_phi[i] << " " << lstTC_seedIdx[i];
+            << "failed to convert a LST object to a seed" << i << " " << lstTC_len[i] << " " << lstTC_seedIdx[i];
         if (lstTC_trackCandidateType[i] == LSTOutput::LSTTCType::T5)
           continue;
       }
@@ -210,8 +205,7 @@ void LSTOutputConverter::produce(edm::StreamID, edm::Event& iEvent, const edm::E
       }
     } else {
       edm::LogInfo("LSTOutputConverter") << "Failed to make a candidate initial state. Seed state is " << tsos
-                                         << " TC cand " << i << " " << lstTC_len[i] << " " << lstTC_pt[i] << " "
-                                         << lstTC_eta[i] << " " << lstTC_phi[i] << " " << lstTC_seedIdx[i]
+                                         << " TC cand " << i << " " << lstTC_len[i] << " " << lstTC_seedIdx[i]
                                          << " first hit " << recHits.front().globalPosition() << " last hit "
                                          << recHits.back().globalPosition();
     }
