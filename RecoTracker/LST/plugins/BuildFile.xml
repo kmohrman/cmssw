@@ -23,14 +23,15 @@
 
 <!-- alpaka-based portable plugins -->
 <library file="alpaka/*.cc" name="RecoTrackerLSTPluginsPortable">
-  <use name="alpaka"/>
+  <!--<use name="alpaka"/>!-->
   <use name="lst"/>
   <use name="FWCore/Framework"/>
   <use name="FWCore/ParameterSet"/>
   <use name="FWCore/Utilities"/>
-  <use name="HeterogeneousCore/AlpakaCore"/>
-  <use name="HeterogeneousCore/AlpakaInterface"/>
+  <!--<use name="HeterogeneousCore/AlpakaCore"/>!-->
+  <!--<use name="HeterogeneousCore/AlpakaInterface"/>!-->
   <use name="RecoTracker/LST"/>
-  <flags ALPAKA_BACKENDS="cuda"/>
+  <use name="HeterogeneousCore/SonicTriton"/>
+  <!--<flags ALPAKA_BACKENDS="cuda"/>!-->
   <flags EDM_PLUGIN="1"/>
 </library>
