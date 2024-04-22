@@ -12,15 +12,6 @@
 #include <SDL/ModuleMethods.h>
 #include <SDL/LST.h>
 
-namespace cms::alpakatools {
-  template <>
-  struct CopyToDevice<SDL::modulesBuffer<alpaka_common::DevHost>> {
-    template <typename TQueue>
-    static auto copyAsync(TQueue& queue, SDL::modulesBuffer<alpaka_common::DevHost> const& srcData) {
-      return SDL::modulesBuffer<alpaka::Dev<TQueue>>(queue, srcData);
-    }
-  };
-} //namespace cms::alpakatools
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
 class LSTModulesDevESProducer : public ESProducer {
