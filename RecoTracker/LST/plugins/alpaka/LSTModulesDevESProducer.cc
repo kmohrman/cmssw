@@ -29,7 +29,7 @@ public:
 
   static void fillDescriptions(edm::ConfigurationDescriptions &descriptions);
 
-  std::optional<SDL::modulesBuffer<alpaka_common::DevHost>> produce(const TrackerRecoGeometryRecord &iRecord);
+  std::optional<SDL::modulesBuffer<SDL::Dev>> produce(device::Record<TrackerRecoGeometryRecord> const& iRecord);
 
 };
 
@@ -45,9 +45,9 @@ void LSTModulesDevESProducer::fillDescriptions(edm::ConfigurationDescriptions &d
   descriptions.addWithDefaultLabel(desc);
 }
 
-  std::optional<SDL::modulesBuffer<alpaka_common::DevHost>> LSTModulesDevESProducer::produce(const TrackerRecoGeometryRecord &iRecord) {
-    SDL::modulesBuffer<alpaka_common::DevHost> modules(cms::alpakatools::host());
-    alpaka::QueueCpuBlocking queue(cms::alpakatools::host());
+  std::optional<SDL::modulesBuffer<SDL::Dev>> LSTModulesDevESProducer::produce(device::Record<TrackerRecoGeometryRecord> const& iRecord) {
+    SDL::QueueAcc& queue = iRecord.queue();
+    SDL::modulesBuffer<SDL::Dev> modules(alpaka::getDev(queue));
     SDL::LST<SDL::Acc>::loadAndFillES(queue, &modules);
     return modules;
 }
