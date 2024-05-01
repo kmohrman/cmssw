@@ -389,7 +389,8 @@ from RecoTracker.LST.lstPixelSeedInputProducer_cfi import lstPixelSeedInputProdu
 from RecoTracker.LST.lstPhase2OTHitsInputProducer_cfi import lstPhase2OTHitsInputProducer
 from RecoTracker.LST.lstProducer_cff import *
 _HighPtTripletStepTask_LST.add(siPhase2RecHits, lstInitialStepSeedTracks, lstHighPtTripletStepSeedTracks, lstPixelSeedInputProducer, lstPhase2OTHitsInputProducer,
-                               lstProducer, lstModulesDevESProducer)
+                               #lstProducer, lstModulesDevESProducer)
+                               lstsonicProducer)
 (trackingPhase2PU140 & trackingLST).toReplaceWith(HighPtTripletStepTask, _HighPtTripletStepTask_LST)
 
 # fast tracking mask producer 

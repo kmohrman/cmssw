@@ -28,9 +28,23 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('file:/home/users/evourlio/TrackingNTupleProduction/CMSSW_12_6_0_pre2/src/step2_DIGI_L1TrackTrigger_L1_DIGI2RAW_HLT.root'),
+    fileNames = cms.untracked.vstring('file:/depot/cms/users/kmohrman/from_evourlio/step2_DIGI_L1TrackTrigger_L1_DIGI2RAW_HLT.root'),
+    #fileNames = cms.untracked.vstring('file:/home/users/evourlio/TrackingNTupleProduction/CMSSW_12_6_0_pre2/src/step2_DIGI_L1TrackTrigger_L1_DIGI2RAW_HLT.root'),
     #fileNames = cms.untracked.vstring('file:/home/users/phchang/work/lst/samples/CMSSW_12_5_0/src/step2_DIGI_L1TrackTrigger_L1_DIGI2RAW_HLT_PU.root'),
     secondaryFileNames = cms.untracked.vstring()
+)
+
+process.load("HeterogeneousCore.SonicTriton.TritonService_cff")
+process.TritonService.verbose = False
+#process.TritonService.fallback.useDocker = True
+process.TritonService.fallback.verbose = False
+# uncomment this part if there is one server running at 0.0.0.0 with grpc port 8001
+process.TritonService.servers.append(
+    cms.PSet(
+        name = cms.untracked.string("default"),
+        address = cms.untracked.string("0.0.0.0"),
+        port = cms.untracked.uint32(8011),
+    )
 )
 
 process.options = cms.untracked.PSet(
@@ -105,7 +119,7 @@ process.lstTracks = RecoTracker.TrackProducer.TrackProducer_cfi.TrackProducer.cl
 
 # Path and EndPath definitions
 process.raw2digi_step = cms.Path(process.RawToDigi)
-process.reconstruction_step = cms.Path(process.reconstruction_trackingOnly*lstInputSequence*process.lstPixelSeedInputProducer*process.lstPhase2OTHitsInputProducer*process.lstProducer*process.lstOutputConverter*process.lstTracks)
+process.reconstruction_step = cms.Path(process.reconstruction_trackingOnly*lstInputSequence*process.lstPixelSeedInputProducer*process.lstPhase2OTHitsInputProducer*process.lstsonicProducer*process.lstOutputConverter*process.lstTracks)
 process.endjob_step = cms.EndPath(process.endOfProcess)
 process.output_step = cms.EndPath(process.output)
 

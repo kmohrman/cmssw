@@ -72,7 +72,7 @@ LSTOutputConverter::LSTOutputConverter(edm::ParameterSet const& iConfig)
 void LSTOutputConverter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
 
-  desc.addUntracked<edm::InputTag>("lstOutput", edm::InputTag("lstProducer"));
+  desc.addUntracked<edm::InputTag>("lstOutput", edm::InputTag("lstsonicProducer"));
   desc.addUntracked<edm::InputTag>("phase2OTHits", edm::InputTag("lstPhase2OTHitsInputProducer"));
   desc.addUntracked<edm::InputTag>("lstPixelSeeds", edm::InputTag("lstPixelSeedInputProducer"));
   desc.add<bool>("includeT5s", true);
