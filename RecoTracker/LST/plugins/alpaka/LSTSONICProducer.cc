@@ -49,6 +49,7 @@
       auto const& pixelSeeds = iEvent.get(lstPixelSeedInputToken_);
       auto const& phase2OTHits = iEvent.get(lstPhase2OTHitsInputToken_);
 
+
       /*
       auto const& modulesData = setup.getData(modulesESToken_);
       lst_.run(event.queue(),
@@ -77,11 +78,9 @@
     */
 
     ////////////////////////////////////////
-    auto& input = iInput.at("input");
-    auto pixelSeedsdata = input.allocate<float>();
+    auto& input_1 = iInput.at("input_1");
+    auto pixelSeedsdata = input_1.allocate<float>();
     auto& vpixelSeedsdata = (*pixelSeedsdata)[0];
-    //auto& vpixelSeedsdata = pixelSeedsdata->at(0);
-    //auto& vpixelSeedsdata = pixelSeedsdata.at(0);
     for (const auto& pixelSeed_px : pixelSeeds.px()) {
       vpixelSeedsdata.push_back(pixelSeed_px);
     }
@@ -137,14 +136,9 @@
       vpixelSeedsdata.push_back(pixelSeed_q);
     }
 
-    //  member named 'algo'?
-    //for (const auto& pixelSeed_algo : pixelSeeds.algo()) {
-    //  vpixelSeedsdata.push_back(pixelSeed_algo);
-    //}
 
-    // This should have it's own input
     //auto hitIdxdata = input.allocate<std::vector<int>>();
-    auto hitIdxdata = input.allocate<int>();
+    auto hitIdxdata = input_1.allocate<int>();
     auto& vhitIdxdata = (*hitIdxdata)[0];
     for (const auto& inputhitIdx_hitIdx_vec : pixelSeeds.hitIdx()) {
         for (const auto& inputhitIdx_hitIdx : inputhitIdx_hitIdx_vec) {
@@ -155,12 +149,13 @@
 
 
     // phase2OTHits
-    auto& input_phase2OTHits = iInput.at("input_phase2OTHitsdata");
-    auto phase2OTHitsdata = input_phase2OTHits.allocate<float>();
+    auto& input_2 = iInput.at("input_2");
+    auto phase2OTHitsdata = input_2.allocate<float>();
     auto& vphase2OTHitsdata = (*phase2OTHitsdata)[0];
     for (const auto& phase2OTHit_x : phase2OTHits.x()) {
       vphase2OTHitsdata.push_back(phase2OTHit_x);
     }
+
 
     for (const auto& phase2OTHit_y : phase2OTHits.y()) {
       vphase2OTHitsdata.push_back(phase2OTHit_y);
@@ -170,15 +165,14 @@
       vphase2OTHitsdata.push_back(phase2OTHit_z);
     }
 
-    auto phase2OTHitsdataInt = input.allocate<unsigned int>();
+    auto phase2OTHitsdataInt = input_1.allocate<unsigned int>();
     auto& vphase2OTHitsdataInt = (*phase2OTHitsdataInt)[0];
     for (const auto& phase2OTHit_detId : phase2OTHits.detId()) {
       vphase2OTHitsdataInt.push_back(phase2OTHit_detId);
     }
 
-
-    input.toServer(pixelSeedsdata);
-    input.toServer(phase2OTHitsdata);
+    input_1.toServer(pixelSeedsdata);
+    input_2.toServer(phase2OTHitsdata);
 
     }
 
