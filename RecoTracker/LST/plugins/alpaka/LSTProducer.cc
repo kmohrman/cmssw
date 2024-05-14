@@ -19,6 +19,8 @@
 
 #include "RecoTracker/Record/interface/TrackerRecoGeometryRecord.h"
 
+#include "RecoTracker/LST/interface/alpaka/LSTESData.h"
+
 #include "SDL/LST.h"
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
@@ -29,7 +31,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         : lstPixelSeedInputToken_{consumes<LSTPixelSeedInput>(config.getParameter<edm::InputTag>("pixelSeedInput"))},
           lstPhase2OTHitsInputToken_{
               consumes<LSTPhase2OTHitsInput>(config.getParameter<edm::InputTag>("phase2OTHitsInput"))},
-          modulesESToken_{esConsumes()},
+          lstESToken_{esConsumes()},
           verbose_(config.getParameter<int>("verbose")),
           lstOutputToken_{produces()} {}
 
@@ -39,9 +41,23 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       auto const& pixelSeeds = event.get(lstPixelSeedInputToken_);
       auto const& phase2OTHits = event.get(lstPhase2OTHitsInputToken_);
 
-      auto const& modulesData = setup.getData(modulesESToken_);
+      auto const& lstESData = setup.getData(lstESToken_);
+      auto nModules = lstESData.nModules;
+      auto nLowerModules = lstESData.nLowerModules;
+      auto modulesBuffers = lstESData.modulesBuffers;
+      auto pixelMapping = lstESData.pixelMapping;
+      auto endcapGeometry = lstESData.endcapGeometry;
+      auto tiltedGeometry = lstESData.tiltedGeometry;
+      auto moduleConnectionMap = lstESData.moduleConnectionMap;
+
       lst_.run(event.queue(),
-               &modulesData,
+               nModules,
+               nLowerModules,
+               modulesBuffers,
+               pixelMapping,
+               endcapGeometry,
+               tiltedGeometry,
+               moduleConnectionMap,
                verbose_,
                pixelSeeds.px(),
                pixelSeeds.py(),
@@ -84,7 +100,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     edm::EDGetTokenT<LSTPixelSeedInput> lstPixelSeedInputToken_;
     edm::EDGetTokenT<LSTPhase2OTHitsInput> lstPhase2OTHitsInputToken_;
-    device::ESGetToken<SDL::modulesBuffer<Device>, TrackerRecoGeometryRecord> modulesESToken_;
+    device::ESGetToken<SDL::LSTESData<SDL::Dev>, TrackerRecoGeometryRecord> lstESToken_;
     const int verbose_;
     edm::EDPutTokenT<LSTOutput> lstOutputToken_;
 
