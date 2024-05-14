@@ -78,14 +78,26 @@
     */
 
     ////////////////////////////////////////
+
+    // Set up the vector in which we'll store all of the pixelSeed info that we will pass as input1
     auto& input_1 = iInput.at("input_1");
     auto pixelSeedsdata = input_1.allocate<float>();
     auto& vpixelSeedsdata = (*pixelSeedsdata)[0];
+
+    // Check the size of pixelSeeds and put it in the input1
+    // This is to know how many pixelSeeds we have, so that we know how to unpack it on the server side
+    std:: cout << "New event! Size: " << pixelSeeds.px().size() << std::endl;
+    vpixelSeedsdata.push_back(pixelSeeds.px().size());
+
+    // Fill up the vector of pixelSeed info that we will pass as input1
     for (const auto& pixelSeed_px : pixelSeeds.px()) {
       vpixelSeedsdata.push_back(pixelSeed_px);
+      std:: cout << "This is pixelSeed_px: " << pixelSeed_px << std::endl;
     }
+
     for (const auto& pixelSeed_py : pixelSeeds.py()) {
       vpixelSeedsdata.push_back(pixelSeed_py);
+      std:: cout << "This is pixelSeed_py: " << pixelSeed_py << std::endl;
     }
 
     for (const auto& pixelSeed_pz : pixelSeeds.pz()) {
@@ -165,7 +177,7 @@
       vphase2OTHitsdata.push_back(phase2OTHit_z);
     }
 
-    auto phase2OTHitsdataInt = input_1.allocate<unsigned int>();
+    auto phase2OTHitsdataInt = input_2.allocate<unsigned int>();
     auto& vphase2OTHitsdataInt = (*phase2OTHitsdataInt)[0];
     for (const auto& phase2OTHit_detId : phase2OTHits.detId()) {
       vphase2OTHitsdataInt.push_back(phase2OTHit_detId);
