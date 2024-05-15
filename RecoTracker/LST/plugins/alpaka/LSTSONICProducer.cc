@@ -93,26 +93,23 @@
     std:: cout << "OT Hits Size: " << phase2OTHits.x().size() << std::endl;
     vinputdata.push_back(phase2OTHits.x().size());
 
-    //auto phase2OTHitsdataInt = input_2.allocate<unsigned int>();
-    //auto& vphase2OTHitsdataInt = (*phase2OTHitsdataInt)[0];
     for (const auto& phase2OTHit_detId : phase2OTHits.detId()) {
-      std:: cout << "The phase2OTHit_detId: " << phase2OTHit_detId << std::endl;
-      //vphase2OTHitsdataInt.push_back(phase2OTHit_detId);
+      std:: cout << "The phase2OTHits_detId:" << phase2OTHit_detId << std::endl;
       vinputdata.push_back(phase2OTHit_detId);
     }
 
     for (const auto& phase2OTHit_x : phase2OTHits.x()) {
-      std:: cout << "The phase2OTHit_x: " << phase2OTHit_x << std::endl;
+      std:: cout << "The phase2OTHits_x: " << phase2OTHit_x << std::endl;
       vinputdata.push_back(phase2OTHit_x);
     }
 
     for (const auto& phase2OTHit_y : phase2OTHits.y()) {
-      std:: cout << "The phase2OTHit_y: " << phase2OTHit_y << std::endl;
+      std:: cout << "The phase2OTHits_y: " << phase2OTHit_y << std::endl;
       vinputdata.push_back(phase2OTHit_y);
     }
 
     for (const auto& phase2OTHit_z : phase2OTHits.z()) {
-      std:: cout << "The phase2OTHit_z: " << phase2OTHit_z << std::endl;
+      std:: cout << "The phase2OTHits_z: " << phase2OTHit_z << std::endl;
       vinputdata.push_back(phase2OTHit_z);
     }
 
@@ -127,81 +124,87 @@
     // Fill up the vector of pixelSeed info that we will pass as input1
     for (const auto& pixelSeed_px : pixelSeeds.px()) {
       vinputdata.push_back(pixelSeed_px);
-      std:: cout << "The pixelSeed_px: " << pixelSeed_px << std::endl;
+      std:: cout << "The pixelSeeds_px: " << pixelSeed_px << std::endl;
     }
 
     for (const auto& pixelSeed_py : pixelSeeds.py()) {
       vinputdata.push_back(pixelSeed_py);
-      std:: cout << "The pixelSeed_py: " << pixelSeed_py << std::endl;
+      std:: cout << "The pixelSeeds_py: " << pixelSeed_py << std::endl;
     }
 
     for (const auto& pixelSeed_pz : pixelSeeds.pz()) {
       vinputdata.push_back(pixelSeed_pz);
-      std:: cout << "The pixelSeed_pz: " << pixelSeed_pz << std::endl;
+      std:: cout << "The pixelSeeds_pz: " << pixelSeed_pz << std::endl;
     }
 
     for (const auto& pixelSeed_dxy : pixelSeeds.dxy()) {
       vinputdata.push_back(pixelSeed_dxy);
-      std:: cout << "The pixelSeed_dxy: " << pixelSeed_dxy  << std::endl;
+      std:: cout << "The pixelSeeds_dxy: " << pixelSeed_dxy  << std::endl;
     }
 
     for (const auto& pixelSeed_dz : pixelSeeds.dz()) {
       vinputdata.push_back(pixelSeed_dz);
-      std:: cout << "The pixelSeed_dz: " << pixelSeed_dz  << std::endl;
+      std:: cout << "The pixelSeeds_dz: " << pixelSeed_dz  << std::endl;
     }
 
     for (const auto& pixelSeed_ptErr : pixelSeeds.ptErr()) {
       vinputdata.push_back(pixelSeed_ptErr);
-      std:: cout << "The pixelSeed_ptErr: " << pixelSeed_ptErr  << std::endl;
+      std:: cout << "The pixelSeeds_ptErr: " << pixelSeed_ptErr  << std::endl;
     }
 
     for (const auto& pixelSeed_etaErr : pixelSeeds.etaErr()) {
       vinputdata.push_back(pixelSeed_etaErr);
-      std:: cout << "The pixelSeed_etaErr: " <<  pixelSeed_etaErr << std::endl;
+      std:: cout << "The pixelSeeds_etaErr: " <<  pixelSeed_etaErr << std::endl;
     }
 
     for (const auto& pixelSeed_stateTrajGlbX : pixelSeeds.stateTrajGlbX()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbX);
-      std:: cout << "The pixelSeed_stateTrajGlbX: " << pixelSeed_stateTrajGlbX  << std::endl;
+      std:: cout << "The pixelSeeds_stateTrajGlbX: " << pixelSeed_stateTrajGlbX  << std::endl;
     }
 
     for (const auto& pixelSeed_stateTrajGlbY : pixelSeeds.stateTrajGlbY()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbY);
-      std:: cout << "The pixelSeed_stateTrajGlbY: " << pixelSeed_stateTrajGlbY  << std::endl;
+      std:: cout << "The pixelSeeds_stateTrajGlbY: " << pixelSeed_stateTrajGlbY  << std::endl;
     }
 
     for (const auto& pixelSeed_stateTrajGlbZ : pixelSeeds.stateTrajGlbZ()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbZ);
-      std:: cout << "The pixelSeed_stateTrajGlbZ: " << pixelSeed_stateTrajGlbZ  << std::endl;
+      std:: cout << "The pixelSeeds_stateTrajGlbZ: " << pixelSeed_stateTrajGlbZ  << std::endl;
     }
 
     for (const auto& pixelSeed_stateTrajGlbPx : pixelSeeds.stateTrajGlbPx()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbPx);
-      std:: cout << "The pixelSeed_stateTrajGlbPx: " <<  pixelSeed_stateTrajGlbPx << std::endl;
+      std:: cout << "The pixelSeeds_stateTrajGlbPx: " <<  pixelSeed_stateTrajGlbPx << std::endl;
     }
 
     for (const auto& pixelSeed_stateTrajGlbPy : pixelSeeds.stateTrajGlbPy()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbPy);
-      std:: cout << "The pixelSeed_stateTrajGlbPy: " << pixelSeed_stateTrajGlbPy  << std::endl;
+      std:: cout << "The pixelSeeds_stateTrajGlbPy: " << pixelSeed_stateTrajGlbPy  << std::endl;
     }
 
     for (const auto& pixelSeed_stateTrajGlbPz : pixelSeeds.stateTrajGlbPz()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbPz);
-      std:: cout << "The pixelSeed_stateTrajGlbPz: " << pixelSeed_stateTrajGlbPz  << std::endl;
+      std:: cout << "The pixelSeeds_stateTrajGlbPz: " << pixelSeed_stateTrajGlbPz  << std::endl;
     }
 
     for (const auto& pixelSeed_q : pixelSeeds.q()) {
       vinputdata.push_back(pixelSeed_q);
-      std:: cout << "The pixelSeed_q: " << pixelSeed_q  << std::endl;
+      std:: cout << "The pixelSeeds_q: " << pixelSeed_q  << std::endl;
     }
 
 
-    //auto hitIdxdata = input.allocate<std::vector<int>>();
-    auto hitIdxdata = input_1.allocate<int>();
-    auto& vhitIdxdata = (*hitIdxdata)[0];
+    // Special case for hitIdx since it has an extra layer of nestedness
+    // Get the size of each of the sub arrays, so we know what shape it is
     for (const auto& inputhitIdx_hitIdx_vec : pixelSeeds.hitIdx()) {
+        std::cout << "The hitIdxShape: " << inputhitIdx_hitIdx_vec.size() << std::endl;
+        vinputdata.push_back(inputhitIdx_hitIdx_vec.size());
+    }
+    // Now put in all of the values
+    for (const auto& inputhitIdx_hitIdx_vec : pixelSeeds.hitIdx()) {
+        std::cout << "Starting:" << std::endl;
         for (const auto& inputhitIdx_hitIdx : inputhitIdx_hitIdx_vec) {
-          vhitIdxdata.push_back(inputhitIdx_hitIdx);
+          vinputdata.push_back(inputhitIdx_hitIdx);
+          std:: cout << "    The hitIdx: " << inputhitIdx_hitIdx << std::endl;
         }
     }
 
