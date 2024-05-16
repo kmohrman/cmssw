@@ -3,12 +3,9 @@ backend: "identity"
 max_batch_size: 1
 input [
   {
-    name: "input_1"
-    data_type: TYPE_FP32
-    dims: [ 200000 ]
-  }, {
-    name: "input_2"
-    data_type: TYPE_FP32
+    name: "input"
+    #data_type: TYPE_FP32
+    data_type: TYPE_FP64
     dims: [ 200000 ]
   }
 ]

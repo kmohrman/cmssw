@@ -79,35 +79,30 @@
 
     ////////////////////////////////////////
 
-    // Set up the vector in which we'll store all of the pixelSeed info that we will pass as input1
-    auto& input_1 = iInput.at("input_1");
-    auto inputdata = input_1.allocate<float>();
+    // Set up the vector in which we'll store all of the pixelSeed info that we will pass as input
+    // The vector will be totally flat, so we'll need to also include some shape info
+    auto& input_1 = iInput.at("input");
+    //auto inputdata = input_1.allocate<float>();
+    auto inputdata = input_1.allocate<double>();
     auto& vinputdata = (*inputdata)[0];
 
-    // phase2OTHits
-
-    auto& input_2 = iInput.at("input_2"); // GET RID OF
-    auto phase2OTHitsdata = input_2.allocate<float>(); // GET RID OF
-    //auto& vphase2OTHitsdata = (*phase2OTHitsdata)[0];
-
+    // phase2OTHits size, so we can reconstruct the vectors properly on the server side
     std:: cout << "OT Hits Size: " << phase2OTHits.x().size() << std::endl;
     vinputdata.push_back(phase2OTHits.x().size());
 
+    // phase2OTHits values
     for (const auto& phase2OTHit_detId : phase2OTHits.detId()) {
       std:: cout << "The phase2OTHits_detId:" << phase2OTHit_detId << std::endl;
       vinputdata.push_back(phase2OTHit_detId);
     }
-
     for (const auto& phase2OTHit_x : phase2OTHits.x()) {
       std:: cout << "The phase2OTHits_x: " << phase2OTHit_x << std::endl;
       vinputdata.push_back(phase2OTHit_x);
     }
-
     for (const auto& phase2OTHit_y : phase2OTHits.y()) {
       std:: cout << "The phase2OTHits_y: " << phase2OTHit_y << std::endl;
       vinputdata.push_back(phase2OTHit_y);
     }
-
     for (const auto& phase2OTHit_z : phase2OTHits.z()) {
       std:: cout << "The phase2OTHits_z: " << phase2OTHit_z << std::endl;
       vinputdata.push_back(phase2OTHit_z);
@@ -116,12 +111,12 @@
 
     // pixelSeeds
 
-    // Check the size of pixelSeeds and put it in the input1
+    // Check the size of pixelSeeds and put it in the input
     // This is to know how many pixelSeeds we have, so that we know how to unpack it on the server side
     std:: cout << "New event! Size: " << pixelSeeds.px().size() << std::endl;
     vinputdata.push_back(pixelSeeds.px().size());
 
-    // Fill up the vector of pixelSeed info that we will pass as input1
+    // Fill up the vector of pixelSeed info that we will pass as input
     for (const auto& pixelSeed_px : pixelSeeds.px()) {
       vinputdata.push_back(pixelSeed_px);
       std:: cout << "The pixelSeeds_px: " << pixelSeed_px << std::endl;
@@ -210,10 +205,7 @@
 
 
 
-
-
     input_1.toServer(inputdata);
-    input_2.toServer(phase2OTHitsdata);
 
     }
 
