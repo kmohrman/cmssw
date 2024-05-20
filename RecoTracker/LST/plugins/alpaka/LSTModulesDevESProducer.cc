@@ -7,12 +7,10 @@
 
 #include "RecoTracker/Record/interface/TrackerRecoGeometryRecord.h"
 
-#include "RecoTracker/LST/interface/alpaka/LSTESData.h"
-
 // LST includes
-#include "SDL/Module.h"
-#include "SDL/ModuleMethods.h"
-#include "SDL/LST.h"
+#include <SDL/Module.h>
+#include <SDL/ModuleMethods.h>
+#include <SDL/LST.h>
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
@@ -22,50 +20,37 @@ public:
 
   static void fillDescriptions(edm::ConfigurationDescriptions &descriptions);
 
-  std::shared_ptr<SDL::LSTESData<SDL::Dev>> produce(device::Record<TrackerRecoGeometryRecord> const& iRecord);
+  //std::unique_ptr<SDL::LSTESHostData> produceHost(TrackerRecoGeometryRecord const& iRecord);
+  std::unique_ptr<SDL::LSTESDeviceData<SDL::Dev>> produceDevice(device::Record<TrackerRecoGeometryRecord> const& iRecord);
+
+  edm::ESGetToken<SDL::LSTESHostData, TrackerRecoGeometryRecord> lstESHostToken_;
 
 };
 
 LSTModulesDevESProducer::LSTModulesDevESProducer(const edm::ParameterSet &iConfig)
   : ESProducer(iConfig)
 {
-  setWhatProduced(this, iConfig.getParameter<std::string>("ComponentName"));
+  // setWhatProduced(this, &LSTModulesDevESProducer::produceHost);
+  // auto cc = setWhatProduced(this, &LSTModulesDevESProducer::produceTest);
+  // lstTestToken_ = cc.consumes();
+
+  setWhatProduced(this, &LSTModulesDevESProducer::produceDevice);
 }
 
 void LSTModulesDevESProducer::fillDescriptions(edm::ConfigurationDescriptions &descriptions) {
   edm::ParameterSetDescription desc;
-  desc.add<std::string>("ComponentName", "")->setComment("Product label");
   descriptions.addWithDefaultLabel(desc);
 }
 
-  std::shared_ptr<SDL::LSTESData<SDL::Dev>> LSTModulesDevESProducer::produce(device::Record<TrackerRecoGeometryRecord> const& iRecord) {
-    SDL::QueueAcc& queue = iRecord.queue();
-    SDL::Dev devAcc = alpaka::getDev(queue);
+// std::unique_ptr<SDL::LSTESHostData> LSTModulesDevESProducer::produceHost(TrackerRecoGeometryRecord const& iRecord) {
+//   return SDL::loadAndFillESHost();
+// }
 
-    // Create objects that used to be global
-    uint16_t nModules;
-    uint16_t nLowerModules;
-    std::shared_ptr<SDL::modulesBuffer<SDL::Dev>> modulesBuffers = std::make_shared<SDL::modulesBuffer<SDL::Dev>>(devAcc);
-    std::shared_ptr<SDL::pixelMap> pixelMapping = std::make_shared<SDL::pixelMap>();
-    std::shared_ptr<SDL::EndcapGeometry<SDL::Dev>> endcapGeometry = std::make_shared<SDL::EndcapGeometry<SDL::Dev>>(devAcc);
-    std::shared_ptr<SDL::TiltedGeometry<SDL::Dev>> tiltedGeometry = std::make_shared<SDL::TiltedGeometry<SDL::Dev>>();
-    std::shared_ptr<SDL::ModuleConnectionMap<SDL::Dev>> moduleConnectionMap = std::make_shared<SDL::ModuleConnectionMap<SDL::Dev>>();
-
-    SDL::LST<SDL::Acc>::loadAndFillES(queue,
-                                      nModules,
-                                      nLowerModules,
-                                      modulesBuffers,
-                                      pixelMapping,
-                                      endcapGeometry,
-                                      tiltedGeometry,
-                                      moduleConnectionMap);
-    return std::make_shared<SDL::LSTESData<SDL::Dev>>(nModules,
-                                                      nLowerModules,
-                                                      modulesBuffers,
-                                                      pixelMapping,
-                                                      endcapGeometry,
-                                                      tiltedGeometry,
-                                                      moduleConnectionMap);
+std::unique_ptr<SDL::LSTESDeviceData<SDL::Dev>> LSTModulesDevESProducer::produceDevice(device::Record<TrackerRecoGeometryRecord> const& iRecord) {
+  //auto const& lstESHostData = iRecord.getData(lstESHostToken_);
+  auto lstESHostData = SDL::loadAndFillESHost();  // TODO: get this from the iRecord bypassing the copy that it tries to do
+  SDL::QueueAcc& queue = iRecord.queue();
+  return SDL::loadAndFillESDevice(queue, lstESHostData.get());
 }
 
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE

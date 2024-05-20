@@ -19,9 +19,7 @@
 
 #include "RecoTracker/Record/interface/TrackerRecoGeometryRecord.h"
 
-#include "RecoTracker/LST/interface/alpaka/LSTESData.h"
-
-#include "SDL/LST.h"
+#include <SDL/LST.h>
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
@@ -41,24 +39,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       auto const& pixelSeeds = event.get(lstPixelSeedInputToken_);
       auto const& phase2OTHits = event.get(lstPhase2OTHitsInputToken_);
 
-      auto const& lstESData = setup.getData(lstESToken_);
-      auto nModules = lstESData.nModules;
-      auto nLowerModules = lstESData.nLowerModules;
-      auto modulesBuffers = lstESData.modulesBuffers;
-      auto pixelMapping = lstESData.pixelMapping;
-      auto endcapGeometry = lstESData.endcapGeometry;
-      auto tiltedGeometry = lstESData.tiltedGeometry;
-      auto moduleConnectionMap = lstESData.moduleConnectionMap;
+      auto const& lstESDeviceData = setup.getData(lstESToken_);
 
       lst_.run(event.queue(),
-               nModules,
-               nLowerModules,
-               modulesBuffers,
-               pixelMapping,
-               endcapGeometry,
-               tiltedGeometry,
-               moduleConnectionMap,
                verbose_,
+               &lstESDeviceData,
                pixelSeeds.px(),
                pixelSeeds.py(),
                pixelSeeds.pz(),
@@ -100,7 +85,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     edm::EDGetTokenT<LSTPixelSeedInput> lstPixelSeedInputToken_;
     edm::EDGetTokenT<LSTPhase2OTHitsInput> lstPhase2OTHitsInputToken_;
-    device::ESGetToken<SDL::LSTESData<SDL::Dev>, TrackerRecoGeometryRecord> lstESToken_;
+    device::ESGetToken<SDL::LSTESDeviceData<SDL::Dev>, TrackerRecoGeometryRecord> lstESToken_;
     const int verbose_;
     edm::EDPutTokenT<LSTOutput> lstOutputToken_;
 
