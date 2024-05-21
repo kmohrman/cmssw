@@ -218,17 +218,34 @@
 
       const auto &output1 = iOutput.begin()->second;
       const auto &outputs_from_server = output1.fromServer<int8_t>();
+      //const auto &outputs_from_server = output1.fromServer<int>();
       auto output = (outputs_from_server[0]);
-      //(void) output;
+
+      //std::cout << "TRY THIS???? output[0] " << output[0] << std::endl; // Seg fault
+      unsigned int pCount = 0;
+      int nHits      = 0;
+      //std::cout << "output.front() " << output.front() << std::endl;
+      std::cout << "&(output.front()): " << &(output.front()) << std::endl;
+      //std::memcpy(&nHits,&(output.front())+pCount,sizeof(int)); pCount += 4;
+      std::cout << "IS THIS nHits?: " << nHits << std::endl;
+
+      (void) output;
+      /*
       std::cout << "TRY THIS" << std::endl;
       //std::vector<int> output_tmp;
       int first_item;
-      //std::memcpy(&first_item, output.data(), sizeof(int));
       std::memcpy(&first_item, &output, sizeof(int));
+      //std::memcpy(&first_item, output.data(), sizeof(int));
       //std::memcpy(&output_tmp, &output, 416);
       //const int * test_buffer = reinterpret_cast<const int *>(output);
       std::cout << "first_item? " << first_item << std::endl;
       std::cout << "DONE" << std::endl;
+
+      int next_item;
+      std::memcpy(&next_item, &output+4, sizeof(int));
+      std::cout << "next_item? " << next_item << std::endl;
+      std::cout << "DONE with next item" << std::endl;
+      */
 
 
       // Output
