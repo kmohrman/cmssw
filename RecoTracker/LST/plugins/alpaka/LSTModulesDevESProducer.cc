@@ -20,9 +20,10 @@ public:
 
   static void fillDescriptions(edm::ConfigurationDescriptions &descriptions);
 
-  //std::unique_ptr<SDL::LSTESHostData> produceHost(TrackerRecoGeometryRecord const& iRecord);
+  std::unique_ptr<SDL::LSTESHostData> produceHost(TrackerRecoGeometryRecord const& iRecord);
   std::unique_ptr<SDL::LSTESDeviceData<SDL::Dev>> produceDevice(device::Record<TrackerRecoGeometryRecord> const& iRecord);
 
+private:
   edm::ESGetToken<SDL::LSTESHostData, TrackerRecoGeometryRecord> lstESHostToken_;
 
 };
@@ -30,11 +31,9 @@ public:
 LSTModulesDevESProducer::LSTModulesDevESProducer(const edm::ParameterSet &iConfig)
   : ESProducer(iConfig)
 {
-  // setWhatProduced(this, &LSTModulesDevESProducer::produceHost);
-  // auto cc = setWhatProduced(this, &LSTModulesDevESProducer::produceTest);
-  // lstTestToken_ = cc.consumes();
-
-  setWhatProduced(this, &LSTModulesDevESProducer::produceDevice);
+  setWhatProduced(this, &LSTModulesDevESProducer::produceHost);
+  auto cc = setWhatProduced(this, &LSTModulesDevESProducer::produceDevice);
+  lstESHostToken_ = cc.consumes();
 }
 
 void LSTModulesDevESProducer::fillDescriptions(edm::ConfigurationDescriptions &descriptions) {
@@ -42,15 +41,14 @@ void LSTModulesDevESProducer::fillDescriptions(edm::ConfigurationDescriptions &d
   descriptions.addWithDefaultLabel(desc);
 }
 
-// std::unique_ptr<SDL::LSTESHostData> LSTModulesDevESProducer::produceHost(TrackerRecoGeometryRecord const& iRecord) {
-//   return SDL::loadAndFillESHost();
-// }
+std::unique_ptr<SDL::LSTESHostData> LSTModulesDevESProducer::produceHost(TrackerRecoGeometryRecord const& iRecord) {
+  return SDL::loadAndFillESHost();
+}
 
 std::unique_ptr<SDL::LSTESDeviceData<SDL::Dev>> LSTModulesDevESProducer::produceDevice(device::Record<TrackerRecoGeometryRecord> const& iRecord) {
-  //auto const& lstESHostData = iRecord.getData(lstESHostToken_);
-  auto lstESHostData = SDL::loadAndFillESHost();  // TODO: get this from the iRecord bypassing the copy that it tries to do
+  auto const& lstESHostData = iRecord.get(lstESHostToken_);
   SDL::QueueAcc& queue = iRecord.queue();
-  return SDL::loadAndFillESDevice(queue, lstESHostData.get());
+  return SDL::loadAndFillESDevice(queue, &lstESHostData);
 }
 
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
