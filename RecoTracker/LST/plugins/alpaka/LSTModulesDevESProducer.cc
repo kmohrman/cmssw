@@ -14,34 +14,32 @@
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
-class LSTModulesDevESProducer : public ESProducer {
-public:
-  LSTModulesDevESProducer(const edm::ParameterSet &iConfig);
+  class LSTModulesDevESProducer : public ESProducer {
+  public:
+    LSTModulesDevESProducer(const edm::ParameterSet &iConfig);
 
-  static void fillDescriptions(edm::ConfigurationDescriptions &descriptions);
+    static void fillDescriptions(edm::ConfigurationDescriptions &descriptions);
 
-  std::optional<SDL::modulesBuffer<SDL::Dev>> produce(device::Record<TrackerRecoGeometryRecord> const& iRecord);
+    std::optional<SDL::modulesBuffer<SDL::Dev>> produce(device::Record<TrackerRecoGeometryRecord> const &iRecord);
+  };
 
-};
+  LSTModulesDevESProducer::LSTModulesDevESProducer(const edm::ParameterSet &iConfig) : ESProducer(iConfig) {
+    setWhatProduced(this, iConfig.getParameter<std::string>("ComponentName"));
+  }
 
-LSTModulesDevESProducer::LSTModulesDevESProducer(const edm::ParameterSet &iConfig)
-  : ESProducer(iConfig)
-{
-  setWhatProduced(this, iConfig.getParameter<std::string>("ComponentName"));
-}
+  void LSTModulesDevESProducer::fillDescriptions(edm::ConfigurationDescriptions &descriptions) {
+    edm::ParameterSetDescription desc;
+    desc.add<std::string>("ComponentName", "")->setComment("Product label");
+    descriptions.addWithDefaultLabel(desc);
+  }
 
-void LSTModulesDevESProducer::fillDescriptions(edm::ConfigurationDescriptions &descriptions) {
-  edm::ParameterSetDescription desc;
-  desc.add<std::string>("ComponentName", "")->setComment("Product label");
-  descriptions.addWithDefaultLabel(desc);
-}
-
-  std::optional<SDL::modulesBuffer<SDL::Dev>> LSTModulesDevESProducer::produce(device::Record<TrackerRecoGeometryRecord> const& iRecord) {
-    SDL::QueueAcc& queue = iRecord.queue();
+  std::optional<SDL::modulesBuffer<SDL::Dev>> LSTModulesDevESProducer::produce(
+      device::Record<TrackerRecoGeometryRecord> const &iRecord) {
+    SDL::QueueAcc &queue = iRecord.queue();
     SDL::modulesBuffer<SDL::Dev> modules(alpaka::getDev(queue));
     SDL::LST<SDL::Acc>::loadAndFillES(queue, &modules);
     return modules;
-}
+  }
 
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
