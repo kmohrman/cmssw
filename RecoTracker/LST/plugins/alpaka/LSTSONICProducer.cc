@@ -216,12 +216,25 @@
     //void produce(device::Event& iEvent, device::EventSetup const& iSetup, Output const& iOutput) override {
     void produce(edm::Event& iEvent, edm::EventSetup const& iSetup, Output const& iOutput) override {
 
-      const auto& output1 = iOutput.begin()->second;
-      const auto& outputs = output1.fromServer<float>();
+      const auto &output1 = iOutput.begin()->second;
+      const auto &outputs_from_server = output1.fromServer<int8_t>();
+      auto output = (outputs_from_server[0]);
+      //(void) output;
+      std::cout << "TRY THIS" << std::endl;
+      //std::vector<int> output_tmp;
+      int first_item;
+      //std::memcpy(&first_item, output.data(), sizeof(int));
+      std::memcpy(&first_item, &output, sizeof(int));
+      //std::memcpy(&output_tmp, &output, 416);
+      //const int * test_buffer = reinterpret_cast<const int *>(output);
+      std::cout << "first_item? " << first_item << std::endl;
+      std::cout << "DONE" << std::endl;
+
 
       // Output
-      LSTOutput lstOutput;
       //lstOutput.setLSTOutputTraits(lst_.hits(), lst_.len(), lst_.seedIdx(), lst_.trackCandidateType());
+      LSTOutput lstOutput;
+      //const float * test_buffer = reinterpret_cast<const float *>(outputs);
 
       iEvent.emplace(lstOutputToken_, std::move(lstOutput));
     }
