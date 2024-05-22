@@ -204,7 +204,7 @@
     }
 
 
-
+    // Send the input to the server
     input_1.toServer(inputdata);
 
     }
@@ -212,40 +212,37 @@
     ////////////////////////////////////////
 
 
-    //void produce(device::Event& event, device::EventSetup const&) override {
-    //void produce(device::Event& iEvent, device::EventSetup const& iSetup, Output const& iOutput) override {
+    // Get the output
     void produce(edm::Event& iEvent, edm::EventSetup const& iSetup, Output const& iOutput) override {
 
+      // Get raw output
       const auto &output1 = iOutput.begin()->second;
-      const auto &outputs_from_server = output1.fromServer<int8_t>();
-      //const auto &outputs_from_server = output1.fromServer<int>();
+      //const auto &outputs_from_server = output1.fromServer<int8_t>();
+      const auto &outputs_from_server = output1.fromServer<int>();
       auto output = (outputs_from_server[0]);
 
-      //std::cout << "TRY THIS???? output[0] " << output[0] << std::endl; // Seg fault
+      // Check output size
+      std::cout << "This is output.size(): " << output.size() << std::endl;
+      std::cout << "This is output.front(): " << output.front() << " did that print?" << std::endl;
+
+      // Try to read the output
       unsigned int pCount = 0;
       int nHits      = 0;
-      //std::cout << "output.front() " << output.front() << std::endl;
-      std::cout << "&(output.front()): " << &(output.front()) << std::endl;
-      //std::memcpy(&nHits,&(output.front())+pCount,sizeof(int)); pCount += 4;
-      std::cout << "IS THIS nHits?: " << nHits << std::endl;
+      std::cout << "Test" << std::endl;
+      //std::cout << "this is output[0]: " << output[0] << std::endl;
+      //std::cout << "this is output[1]: " << output[1] << std::endl;
+      //std::cout << "&(output.front()): " << &(output.front()) << " after" << std::endl;
+      std::memcpy(&nHits,&(output.front())+pCount,sizeof(int)); pCount += 4;
+      std::cout << "This is nHits?: " << nHits << std::endl;
 
-      (void) output;
-      /*
-      std::cout << "TRY THIS" << std::endl;
       //std::vector<int> output_tmp;
-      int first_item;
-      std::memcpy(&first_item, &output, sizeof(int));
+      //int first_item;
+      //std::memcpy(&first_item, &output, sizeof(int));
       //std::memcpy(&first_item, output.data(), sizeof(int));
-      //std::memcpy(&output_tmp, &output, 416);
-      //const int * test_buffer = reinterpret_cast<const int *>(output);
-      std::cout << "first_item? " << first_item << std::endl;
-      std::cout << "DONE" << std::endl;
-
-      int next_item;
-      std::memcpy(&next_item, &output+4, sizeof(int));
-      std::cout << "next_item? " << next_item << std::endl;
-      std::cout << "DONE with next item" << std::endl;
-      */
+      //std::cout << "first_item? " << first_item << std::endl;
+      //int next_item;
+      //std::memcpy(&next_item, &output+4, sizeof(int));
+      //std::cout << "next_item? " << next_item << std::endl;
 
 
       // Output
