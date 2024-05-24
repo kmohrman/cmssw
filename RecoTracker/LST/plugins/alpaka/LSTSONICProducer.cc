@@ -215,7 +215,8 @@
     // Get the output
     void produce(edm::Event& iEvent, edm::EventSetup const& iSetup, Output const& iOutput) override {
 
-      // Get the raw output
+
+      ////////// Get the raw output and put it into a vector //////////
       const auto &output1 = iOutput.begin()->second;
       const auto &outputs_from_server = output1.fromServer<int8_t>();
       auto output = (outputs_from_server[0]);
@@ -229,6 +230,7 @@
           std::cout << "tmp: " << tmp << std::endl;
           output_vec.push_back(tmp);
       };
+
 
       ////////// Reconstruct the output objects from the flat vector //////////
 
@@ -288,7 +290,7 @@
           std::vector<unsigned int> tmp_vec;
           itr_start = itr_main;
           for (int i=itr_start; i<itr_start+hits_size; i++){
-              output_vec.push_back((unsigned int) output[i]);
+              tmp_vec.push_back((unsigned int) output_vec[i]);
               std::cout << "    The hit: " << output_vec[i] << std::endl;
               itr_main++;
           }
@@ -296,14 +298,34 @@
       }
 
 
+      // Print what's in the vectors
+      std::cout << "out_seedIdx" << std::endl;
+      for (const auto& i : out_seedIdx){
+        std::cout << "This is: " << i << std::endl;
+      }
+      std::cout << "out_trackCandidateType" << std::endl;
+      for (const auto& i :out_trackCandidateType){
+        std::cout << "This is: " << i << std::endl;
+      }
+      std::cout << "out_len" << std::endl;
+      for (const auto& i :out_len){
+        std::cout << "This is: " << i << std::endl;
+      }
+      std::cout << "out_hits" << std::endl;
+      for (const auto& i :out_hits){
+          for (const auto& ii : i){
+            std::cout << "This is: " << ii << std::endl;
+          }
+      }
 
 
-      // Output
-      //lstOutput.setLSTOutputTraits(lst_.hits(), lst_.len(), lst_.seedIdx(), lst_.trackCandidateType());
+      ////////// Construct the LST output object //////////
+
       LSTOutput lstOutput;
-      //const float * test_buffer = reinterpret_cast<const float *>(outputs);
+      lstOutput.setLSTOutputTraits(out_hits, out_len, out_seedIdx, out_trackCandidateType);
 
       iEvent.emplace(lstOutputToken_, std::move(lstOutput));
+
     }
 
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
