@@ -1,6 +1,6 @@
 name: "identity_fp32"
 backend: "identity"
-max_batch_size: 1
+max_batch_size: 0
 input [
   {
     name: "input"
@@ -12,8 +12,7 @@ input [
 output [
   {
     name: "OUTPUT0"
-    data_type: TYPE_INT32
-    #data_type: TYPE_INT8
+    data_type: TYPE_INT8
     #dims: [ 7200000 ]
     dims: [ -1 ]
   }
