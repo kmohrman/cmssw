@@ -218,7 +218,7 @@
       // Get the raw output
       const auto &output1 = iOutput.begin()->second;
       const auto &outputs_from_server = output1.fromServer<int8_t>();
-      auto output = (outputs_from_server[0]); 
+      auto output = (outputs_from_server[0]);
 
       // Dump the raw output into a vector
       std::vector <int> output_vec;
@@ -257,10 +257,45 @@
       std::cout << "trackCandidateType_len: " << trackCandidateType_len << std::endl;
       itr_start = itr_main;
       for (int i=itr_start; i<itr_start+trackCandidateType_len; i++){
-          out_trackCandidateType.push_back(output_vec[i]);
+          out_trackCandidateType.push_back(short (output_vec[i]));
           std::cout << "    " << output_vec[i] << std::endl;
           itr_main++;
       };
+
+      // Get the len vector
+      int len_len = output_vec[itr_main]; itr_main++;
+      std::cout << "len_len: " << len_len << std::endl;
+      itr_start = itr_main;
+      for (int i=itr_start; i<itr_start+len_len; i++){
+          out_len.push_back((unsigned int) output_vec[i]);
+          std::cout << "    " << output_vec[i] << std::endl;
+          itr_main++;
+      };
+
+      // Get the hits vector of vectors (harder, since nested)
+      // Get the shape vector
+      int hits_len = output_vec[itr_main]; itr_main++;
+      std::vector<int> hits_sizes;
+      itr_start = itr_main;
+      for (int i=itr_start; i<itr_start+hits_len; i++){
+          hits_sizes.push_back(output_vec[i]);
+          std::cout << "The hits sizes: " << output_vec[i] << std::endl;
+          itr_main++;
+      }
+      // Get the values
+      for (const auto& hits_size : hits_sizes){
+          std::cout << "hits_size: " << hits_size << std::endl;
+          std::vector<unsigned int> tmp_vec;
+          itr_start = itr_main;
+          for (int i=itr_start; i<itr_start+hits_size; i++){
+              output_vec.push_back((unsigned int) output[i]);
+              std::cout << "    The hit: " << output_vec[i] << std::endl;
+              itr_main++;
+          }
+          out_hits.push_back(tmp_vec);
+      }
+
+
 
 
       // Output
