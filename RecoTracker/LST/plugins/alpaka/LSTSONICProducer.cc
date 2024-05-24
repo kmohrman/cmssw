@@ -215,95 +215,52 @@
     // Get the output
     void produce(edm::Event& iEvent, edm::EventSetup const& iSetup, Output const& iOutput) override {
 
-      // Get raw output
-      //const auto &output1 = iOutput.begin()->second;
-      //const auto &outputs_from_server = output1.fromServer<int8_t>();
-      ////const auto &outputs_from_server = output1.fromServer<int>();
-      //auto output = (outputs_from_server[0]);
-
-      // Check output size
-      //std::cout << "This is output.size(): " << output.size() << std::endl;
-      //std::cout << "This is output.front(): " << output.front() << " did that print?" << std::endl;
-
-      // Try to read the output
-      //unsigned int pCount = 0;
-      //int nHits      = 0;
-      //std::cout << "Test" << std::endl;
-      //std::cout << "this is output[0]: " << output[0] << std::endl;
-      //std::cout << "this is output[1]: " << output[1] << std::endl;
-      //std::cout << "&(output.front()): " << &(output.front()) << " after" << std::endl;
-      //std::cout << "&(output.front())+pCount  " << &(output.front())+pCount << std::endl;
-      //std::memcpy(&nHits,&(output.front())+pCount,sizeof(int)); pCount += 4;
-      //std::cout << "This is nHits?: " << nHits << std::endl;
-      //std::cout << "This is pCount?: " <<  pCount << std::endl;
-
-      //std::cout << "output[0]: " << output[0] << std::endl;
-      //std::cout << "static_cast<int32_t>(output[0]): " << static_cast<int32_t>(output[0]) << std::endl;
-      //std::cout << "static_cast<int32_t>(output[1]): " << static_cast<int32_t>(output[1]) << std::endl;
-      //std::cout << "static_cast<int32_t>(output[2]): " << static_cast<int32_t>(output[2]) << std::endl;
-      //std::cout << "What is this???: " << static_cast<int32_t>(output.front()) << std::endl;
-
-      //int  next = 0;
-      //std::cout << "befor next &(output.front())+pCount  " << &(output.front())+pCount << std::endl;
-
-      //std::memcpy(&next,(output),sizeof(int)); pCount += 4;
-      //std::cout << "This is 0?: " << nHits << std::endl;
-      //std::memcpy(&next,(output)+pCount,sizeof(int)); pCount += 4;
-      //std::cout << "This is 1?: " << nHits << std::endl;
-      //std::memcpy(&next,(output)+pCount,sizeof(int)); pCount += 4;
-      //std::cout << "This is 2?: " << nHits << std::endl;
-
-      //std::cout << "=================" << std::endl;
-
-      //const signed char * test_buffer = reinterpret_cast<const signed char *>(output);
-
-
-      //const void* output_tmp = output;
-      //int8_t *output_buffer = new int8_t[output.size()];
-      //memcpy(output_buffer,output+tmp,output.size());
-      //uint32_t nHits = 0;
-      //uint32_t nDigis    = 0;
-      //std::memcpy(&nHits,output_buffer+pCount,sizeof(uint32_t)); pCount += 4;
-      //std::memcpy(hits_, output_buffer+pCount,(2000+1)*sizeof(uint32_t));    pCount += 4*(2000+1);
-
-
-      //std::vector<int> output_tmp;
-      //int first_item;
-      //std::memcpy(&first_item, &output, sizeof(int));
-      //std::memcpy(&first_item, output.data(), sizeof(int));
-      //std::cout << "first_item? " << first_item << std::endl;
-      //int next_item;
-      //std::memcpy(&next_item, &output+4, sizeof(int));
-      //std::cout << "next_item? " << next_item << std::endl;
-
-      std::cout << "=================" << std::endl;
-
-      uint32_t* pdigi_ = new uint32_t[150000];
-      uint32_t* rawIdArr_ = new uint32_t[150000];
-      uint16_t* adc_ = new uint16_t[150000];
-      int32_t* clus_ = new int32_t[150000];
-      //uint32_t* hits_ = new uint32_t[2001];
-      float* pos_ = new float[4*35000];
-
-
-      //PixelTrackHeterogeneous tracks;
+      // Get the raw output
       const auto &output1 = iOutput.begin()->second;
       const auto &outputs_from_server = output1.fromServer<int8_t>();
-      auto output = (outputs_from_server[0]);  
-      unsigned int pCount = 0;
-      //uint32_t nHits      = 0; //output[pCount]; pCount++;
-      //uint32_t hits_= 0; //output[pCount]; pCount++;
-      //std::memcpy(&nHits,&(output.front())+pCount,sizeof(uint32_t)); pCount += 4;
-      //std::memcpy(&hits_, &(output.front())+pCount,sizeof(uint32_t)); pCount += 4;
-      int32_t nHits      = 0; //output[pCount]; pCount++;
-      int32_t hits_= 0; //output[pCount]; pCount++;
-      std::memcpy(&nHits,&(output.front())+pCount,sizeof(int)); pCount += 4;
-      std::memcpy(&hits_, &(output.front())+pCount,sizeof(int)); pCount += 4;
+      auto output = (outputs_from_server[0]); 
 
-      std::cout << "nHits: " << nHits << std::endl;
-      std::cout << "hits_: " << hits_<< std::endl;
-      std::cout << "&hits_: " << &hits_<< std::endl;
+      // Dump the raw output into a vector
+      std::vector <int> output_vec;
+      int output_len = output.size()/sizeof(int);
+      for (int i=0; i<output_len; i++) {
+          int tmp = 0;
+          std::memcpy(&tmp,&(output.front())+i*sizeof(int),sizeof(int));
+          std::cout << "tmp: " << tmp << std::endl;
+          output_vec.push_back(tmp);
+      };
 
+      ////////// Reconstruct the output objects from the flat vector //////////
+
+      // The vectors we'll be building up
+      std::vector<int>                       out_seedIdx;
+      std::vector<short>                     out_trackCandidateType;
+      std::vector<unsigned int>              out_len;
+      std::vector<std::vector<unsigned int>> out_hits;
+
+      // Counters we'll need to uses to keep track as we loop
+      int itr_main = 0; // This will be the counter as we loop through the flat vector
+      int itr_start = 0; // Use this to keep track of where to start each for loop
+
+      // Get the seedIdx vector
+      int seedIdx_len = output_vec[0]; itr_main++;
+      std::cout << "seedIdx_len: " << seedIdx_len << std::endl;
+      itr_start = itr_main;
+      for (int i=itr_start; i<itr_start+seedIdx_len; i++){
+          out_seedIdx.push_back(output_vec[i]);
+          std::cout << "    " << output_vec[i] << std::endl;
+          itr_main++;
+      };
+
+      // Get the trackCandidateType vector
+      int trackCandidateType_len = output_vec[itr_main]; itr_main++;
+      std::cout << "trackCandidateType_len: " << trackCandidateType_len << std::endl;
+      itr_start = itr_main;
+      for (int i=itr_start; i<itr_start+trackCandidateType_len; i++){
+          out_trackCandidateType.push_back(output_vec[i]);
+          std::cout << "    " << output_vec[i] << std::endl;
+          itr_main++;
+      };
 
 
       // Output
