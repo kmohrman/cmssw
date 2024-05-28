@@ -86,25 +86,27 @@
     auto inputdata = input_1.allocate<double>();
     auto& vinputdata = (*inputdata)[0];
 
+    bool prints = false;
+
     // phase2OTHits size, so we can reconstruct the vectors properly on the server side
-    std:: cout << "OT Hits Size: " << phase2OTHits.x().size() << std::endl;
+    if (prints) { std:: cout << "OT Hits Size: " << phase2OTHits.x().size() << std::endl;};
     vinputdata.push_back(phase2OTHits.x().size());
 
     // phase2OTHits values
     for (const auto& phase2OTHit_detId : phase2OTHits.detId()) {
-      std:: cout << "The phase2OTHits_detId:" << phase2OTHit_detId << std::endl;
+      if (prints) { std:: cout << "The phase2OTHits_detId:" << phase2OTHit_detId << std::endl; };
       vinputdata.push_back(phase2OTHit_detId);
     }
     for (const auto& phase2OTHit_x : phase2OTHits.x()) {
-      std:: cout << "The phase2OTHits_x: " << phase2OTHit_x << std::endl;
+      if (prints) { std:: cout << "The phase2OTHits_x: " << phase2OTHit_x << std::endl;};
       vinputdata.push_back(phase2OTHit_x);
     }
     for (const auto& phase2OTHit_y : phase2OTHits.y()) {
-      std:: cout << "The phase2OTHits_y: " << phase2OTHit_y << std::endl;
+      if (prints) { std:: cout << "The phase2OTHits_y: " << phase2OTHit_y << std::endl; };
       vinputdata.push_back(phase2OTHit_y);
     }
     for (const auto& phase2OTHit_z : phase2OTHits.z()) {
-      std:: cout << "The phase2OTHits_z: " << phase2OTHit_z << std::endl;
+      if (prints) { std:: cout << "The phase2OTHits_z: " << phase2OTHit_z << std::endl; };
       vinputdata.push_back(phase2OTHit_z);
     }
 
@@ -119,87 +121,87 @@
     // Fill up the vector of pixelSeed info that we will pass as input
     for (const auto& pixelSeed_px : pixelSeeds.px()) {
       vinputdata.push_back(pixelSeed_px);
-      std:: cout << "The pixelSeeds_px: " << pixelSeed_px << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_px: " << pixelSeed_px << std::endl; };
     }
 
     for (const auto& pixelSeed_py : pixelSeeds.py()) {
       vinputdata.push_back(pixelSeed_py);
-      std:: cout << "The pixelSeeds_py: " << pixelSeed_py << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_py: " << pixelSeed_py << std::endl; };
     }
 
     for (const auto& pixelSeed_pz : pixelSeeds.pz()) {
       vinputdata.push_back(pixelSeed_pz);
-      std:: cout << "The pixelSeeds_pz: " << pixelSeed_pz << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_pz: " << pixelSeed_pz << std::endl; };
     }
 
     for (const auto& pixelSeed_dxy : pixelSeeds.dxy()) {
       vinputdata.push_back(pixelSeed_dxy);
-      std:: cout << "The pixelSeeds_dxy: " << pixelSeed_dxy  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_dxy: " << pixelSeed_dxy  << std::endl; };
     }
 
     for (const auto& pixelSeed_dz : pixelSeeds.dz()) {
       vinputdata.push_back(pixelSeed_dz);
-      std:: cout << "The pixelSeeds_dz: " << pixelSeed_dz  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_dz: " << pixelSeed_dz  << std::endl; };
     }
 
     for (const auto& pixelSeed_ptErr : pixelSeeds.ptErr()) {
       vinputdata.push_back(pixelSeed_ptErr);
-      std:: cout << "The pixelSeeds_ptErr: " << pixelSeed_ptErr  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_ptErr: " << pixelSeed_ptErr  << std::endl; };
     }
 
     for (const auto& pixelSeed_etaErr : pixelSeeds.etaErr()) {
       vinputdata.push_back(pixelSeed_etaErr);
-      std:: cout << "The pixelSeeds_etaErr: " <<  pixelSeed_etaErr << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_etaErr: " <<  pixelSeed_etaErr << std::endl; };
     }
 
     for (const auto& pixelSeed_stateTrajGlbX : pixelSeeds.stateTrajGlbX()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbX);
-      std:: cout << "The pixelSeeds_stateTrajGlbX: " << pixelSeed_stateTrajGlbX  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_stateTrajGlbX: " << pixelSeed_stateTrajGlbX  << std::endl; };
     }
 
     for (const auto& pixelSeed_stateTrajGlbY : pixelSeeds.stateTrajGlbY()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbY);
-      std:: cout << "The pixelSeeds_stateTrajGlbY: " << pixelSeed_stateTrajGlbY  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_stateTrajGlbY: " << pixelSeed_stateTrajGlbY  << std::endl; };
     }
 
     for (const auto& pixelSeed_stateTrajGlbZ : pixelSeeds.stateTrajGlbZ()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbZ);
-      std:: cout << "The pixelSeeds_stateTrajGlbZ: " << pixelSeed_stateTrajGlbZ  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_stateTrajGlbZ: " << pixelSeed_stateTrajGlbZ  << std::endl; };
     }
 
     for (const auto& pixelSeed_stateTrajGlbPx : pixelSeeds.stateTrajGlbPx()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbPx);
-      std:: cout << "The pixelSeeds_stateTrajGlbPx: " <<  pixelSeed_stateTrajGlbPx << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_stateTrajGlbPx: " <<  pixelSeed_stateTrajGlbPx << std::endl; };
     }
 
     for (const auto& pixelSeed_stateTrajGlbPy : pixelSeeds.stateTrajGlbPy()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbPy);
-      std:: cout << "The pixelSeeds_stateTrajGlbPy: " << pixelSeed_stateTrajGlbPy  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_stateTrajGlbPy: " << pixelSeed_stateTrajGlbPy  << std::endl; };
     }
 
     for (const auto& pixelSeed_stateTrajGlbPz : pixelSeeds.stateTrajGlbPz()) {
       vinputdata.push_back(pixelSeed_stateTrajGlbPz);
-      std:: cout << "The pixelSeeds_stateTrajGlbPz: " << pixelSeed_stateTrajGlbPz  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_stateTrajGlbPz: " << pixelSeed_stateTrajGlbPz  << std::endl; };
     }
 
     for (const auto& pixelSeed_q : pixelSeeds.q()) {
       vinputdata.push_back(pixelSeed_q);
-      std:: cout << "The pixelSeeds_q: " << pixelSeed_q  << std::endl;
+      if (prints) { std:: cout << "The pixelSeeds_q: " << pixelSeed_q  << std::endl; };
     }
 
 
     // Special case for hitIdx since it has an extra layer of nestedness
     // Get the size of each of the sub arrays, so we know what shape it is
     for (const auto& inputhitIdx_hitIdx_vec : pixelSeeds.hitIdx()) {
-        std::cout << "The hitIdxShape: " << inputhitIdx_hitIdx_vec.size() << std::endl;
+        if (prints) { std::cout << "The hitIdxShape: " << inputhitIdx_hitIdx_vec.size() << std::endl; };
         vinputdata.push_back(inputhitIdx_hitIdx_vec.size());
     }
     // Now put in all of the values
     for (const auto& inputhitIdx_hitIdx_vec : pixelSeeds.hitIdx()) {
-        std::cout << "Starting:" << std::endl;
+        if (prints) { std::cout << "Starting:" << std::endl; };
         for (const auto& inputhitIdx_hitIdx : inputhitIdx_hitIdx_vec) {
           vinputdata.push_back(inputhitIdx_hitIdx);
-          std:: cout << "    The hitIdx: " << inputhitIdx_hitIdx << std::endl;
+          if (prints) { std:: cout << "    The hitIdx: " << inputhitIdx_hitIdx << std::endl; };
         }
     }
 
@@ -215,6 +217,7 @@
     // Get the output
     void produce(edm::Event& iEvent, edm::EventSetup const& iSetup, Output const& iOutput) override {
 
+      bool prints = false;
 
       ////////// Get the raw output and put it into a vector //////////
       const auto &output1 = iOutput.begin()->second;
@@ -227,7 +230,7 @@
       for (int i=0; i<output_len; i++) {
           int tmp = 0;
           std::memcpy(&tmp,&(output.front())+i*sizeof(int),sizeof(int));
-          std::cout << "tmp: " << tmp << std::endl;
+          if (prints) { std::cout << "tmp: " << tmp << std::endl; };
           output_vec.push_back(tmp);
       };
 
@@ -246,31 +249,31 @@
 
       // Get the seedIdx vector
       int seedIdx_len = output_vec[0]; itr_main++;
-      std::cout << "seedIdx_len: " << seedIdx_len << std::endl;
+      if (prints) { std::cout << "seedIdx_len: " << seedIdx_len << std::endl; };
       itr_start = itr_main;
       for (int i=itr_start; i<itr_start+seedIdx_len; i++){
           out_seedIdx.push_back(output_vec[i]);
-          std::cout << "    " << output_vec[i] << std::endl;
+          if (prints) { std::cout << "    " << output_vec[i] << std::endl; };
           itr_main++;
       };
 
       // Get the trackCandidateType vector
       int trackCandidateType_len = output_vec[itr_main]; itr_main++;
-      std::cout << "trackCandidateType_len: " << trackCandidateType_len << std::endl;
+      if (prints) { std::cout << "trackCandidateType_len: " << trackCandidateType_len << std::endl; };
       itr_start = itr_main;
       for (int i=itr_start; i<itr_start+trackCandidateType_len; i++){
           out_trackCandidateType.push_back(short (output_vec[i]));
-          std::cout << "    " << output_vec[i] << std::endl;
+          if (prints) { std::cout << "    " << output_vec[i] << std::endl; };
           itr_main++;
       };
 
       // Get the len vector
       int len_len = output_vec[itr_main]; itr_main++;
-      std::cout << "len_len: " << len_len << std::endl;
+      if (prints) { std::cout << "len_len: " << len_len << std::endl; };
       itr_start = itr_main;
       for (int i=itr_start; i<itr_start+len_len; i++){
           out_len.push_back((unsigned int) output_vec[i]);
-          std::cout << "    " << output_vec[i] << std::endl;
+          if (prints) { std::cout << "    " << output_vec[i] << std::endl; };
           itr_main++;
       };
 
@@ -281,17 +284,17 @@
       itr_start = itr_main;
       for (int i=itr_start; i<itr_start+hits_len; i++){
           hits_sizes.push_back(output_vec[i]);
-          std::cout << "The hits sizes: " << output_vec[i] << std::endl;
+          if (prints) { std::cout << "The hits sizes: " << output_vec[i] << std::endl; };
           itr_main++;
       }
       // Get the values
       for (const auto& hits_size : hits_sizes){
-          std::cout << "hits_size: " << hits_size << std::endl;
+          if (prints) { std::cout << "hits_size: " << hits_size << std::endl; };
           std::vector<unsigned int> tmp_vec;
           itr_start = itr_main;
           for (int i=itr_start; i<itr_start+hits_size; i++){
               tmp_vec.push_back((unsigned int) output_vec[i]);
-              std::cout << "    The hit: " << output_vec[i] << std::endl;
+              if (prints) { std::cout << "    The hit: " << output_vec[i] << std::endl; };
               itr_main++;
           }
           out_hits.push_back(tmp_vec);
@@ -299,22 +302,25 @@
 
 
       // Print what's in the vectors
-      std::cout << "out_seedIdx" << std::endl;
-      for (const auto& i : out_seedIdx){
-        std::cout << "This is: " << i << std::endl;
-      }
-      std::cout << "out_trackCandidateType" << std::endl;
-      for (const auto& i :out_trackCandidateType){
-        std::cout << "This is: " << i << std::endl;
-      }
-      std::cout << "out_len" << std::endl;
-      for (const auto& i :out_len){
-        std::cout << "This is: " << i << std::endl;
-      }
-      std::cout << "out_hits" << std::endl;
-      for (const auto& i :out_hits){
-          for (const auto& ii : i){
-            std::cout << "This is: " << ii << std::endl;
+      if (prints) {
+          std::cout << "out_seedIdx" << std::endl;
+          for (const auto& i : out_seedIdx){
+            std::cout << "This is: " << i << std::endl;
+          }
+          std::cout << "out_trackCandidateType" << std::endl;
+          for (const auto& i :out_trackCandidateType){
+            std::cout << "This is: " << i << std::endl;
+          }
+          std::cout << "out_len" << std::endl;
+          for (const auto& i :out_len){
+            std::cout << "This is: " << i << std::endl;
+          }
+          std::cout << "out_hits" << std::endl;
+          for (const auto& i :out_hits){
+              std::cout << "This is: " << std::endl;
+              for (const auto& ii : i){
+                std::cout << "    This is: " << ii << std::endl;
+              }
           }
       }
 
