@@ -25,29 +25,31 @@
 
 <!-- alpaka-based portable plugins -->
 <library file="alpaka/*.cc" name="RecoTrackerLSTPluginsPortableCpu">
-  <use name="alpaka"/>
+  <!--<use name="alpaka"/>!-->
   <use name="lst_cpu"/>
   <use name="FWCore/Framework"/>
   <use name="FWCore/ParameterSet"/>
   <use name="FWCore/Utilities"/>
-  <use name="HeterogeneousCore/AlpakaCore"/>
-  <use name="HeterogeneousCore/AlpakaInterface"/>
+  <!--<use name="HeterogeneousCore/AlpakaCore"/>!-->
+  <!--<use name="HeterogeneousCore/AlpakaInterface"/>!-->
   <use name="RecoTracker/LST"/>
   <use name="RecoTracker/Record"/>
-  <flags ALPAKA_BACKENDS="serial"/>
+  <!--<flags ALPAKA_BACKENDS="serial"/>!-->
+  <use name="HeterogeneousCore/SonicTriton"/>
   <flags EDM_PLUGIN="1"/>
 </library>
 
-<library file="alpaka/*.cc" name="RecoTrackerLSTPluginsPortableCuda">
-  <use name="alpaka"/>
-  <use name="lst_cuda"/>
-  <use name="FWCore/Framework"/>
-  <use name="FWCore/ParameterSet"/>
-  <use name="FWCore/Utilities"/>
-  <use name="HeterogeneousCore/AlpakaCore"/>
-  <use name="HeterogeneousCore/AlpakaInterface"/>
-  <use name="RecoTracker/LST"/>
-  <use name="RecoTracker/Record"/>
-  <flags ALPAKA_BACKENDS="cuda"/>
-  <flags EDM_PLUGIN="1"/>
-</library>
+<!--<library file="alpaka/*.cc" name="RecoTrackerLSTPluginsPortableCuda">!-->
+  <!--<use name="alpaka"/>!-->
+  <!--<use name="lst_cuda"/>!-->
+  <!--<use name="FWCore/Framework"/>!-->
+  <!--<use name="FWCore/ParameterSet"/>!-->
+  <!--<use name="FWCore/Utilities"/>!-->
+  <!--<use name="HeterogeneousCore/AlpakaCore"/>!-->
+  <!--<use name="HeterogeneousCore/AlpakaInterface"/>!-->
+  <!--<use name="RecoTracker/LST"/>!-->
+  <!--<use name="RecoTracker/Record"/>!-->
+  <!--<flags ALPAKA_BACKENDS="cuda"/>!-->
+  <!--<use name="HeterogeneousCore/SonicTriton"/>!-->
+  <!--<flags EDM_PLUGIN="1"/>!-->
+<!--</library>!-->

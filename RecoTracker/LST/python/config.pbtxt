@@ -1,0 +1,36 @@
+name: "identity_fp32"
+backend: "identity"
+max_batch_size: 0
+input [
+  {
+    name: "input"
+    #data_type: TYPE_FP32
+    data_type: TYPE_FP64
+    #dims: [ 200000 ]
+    dims: [ 200000000 ]
+    #dims: [ -1 ]
+  }
+]
+output [
+  {
+    name: "OUTPUT0"
+    data_type: TYPE_INT8
+    #dims: [ 7200000 ]
+    dims: [ -1 ]
+  }
+]
+instance_group [
+  {
+    count: 1
+    #kind : KIND_GPU
+    kind : KIND_CPU
+
+  }
+]
+#instance_group [
+#  {
+#    count: 4
+#    kind: KIND_GPU
+#    gpus: [ 0 ]
+#  }
+#]
