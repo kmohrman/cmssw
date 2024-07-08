@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: step3 -s RAW2DIGI,RECO:reconstruction_trackingOnly --conditions auto:phase2_realistic_T21 --datatier GEN-SIM-RECO,DQMIO -n 10 --eventcontent RECOSIM,DQM --geometry Extended2026D88 --era Phase2C17I13M9 --procModifiers gpu,trackingLST,trackingIters01 --no_exec
+# with command line options: step3 -s RAW2DIGI,RECO:reconstruction_trackingOnly --conditions auto:phase2_realistic_T21 --datatier GEN-SIM-RECO -n 10 --eventcontent RECOSIM --geometry Extended2026D88 --era Phase2C17I13M9 --procModifiers gpu,trackingLST,trackingIters01 --no_exec
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
@@ -61,12 +61,13 @@ process.load('Configuration.Geometry.GeometryExtended2026D88Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.RawToDigi_cff')
 process.load('Configuration.StandardSequences.Reconstruction_cff')
+process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.Accelerators_cff')
 process.load("HeterogeneousCore.AlpakaCore.ProcessAcceleratorAlpaka_cfi")
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100),
+    input = cms.untracked.int32(300),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
@@ -76,9 +77,14 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
         #'file:/depot/cms/users/kmohrman/from_evourlio/step2_21034.1_100Events.root',                                         # From Manos May 29, CMSS_12_* (ttbar)
         #'file:/depot/cms/users/kmohrman/from_evourlio/step2_DIGI_L1TrackTrigger_L1_DIGI2RAW_HLT.root',                       # The one originally specified in the repo (muon gun)
-        'file:/depot/cms/users/kmohrman/from_evourlio/anriosta_LST_samples_CMSSW_14_1_0_pre0/step2_21034.1_100Events.root',  # The 14_* one pointed to in the master readme (ttbar?)
+        #'file:/depot/cms/users/kmohrman/from_evourlio/anriosta_LST_samples_CMSSW_14_1_0_pre0/step2_21034.1_100Events.root',  # The 14_* one pointed to in the master readme (ttbar?)
+
+        # Timing study
+        'file:/depot/cms/users/kmohrman/from_evourlio/anriosta_LST_samples_CMSSW_14_1_0_pre0/step2_21034.1_100Events_CP01.root',
+        'file:/depot/cms/users/kmohrman/from_evourlio/anriosta_LST_samples_CMSSW_14_1_0_pre0/step2_21034.1_100Events_CP02.root',
+        'file:/depot/cms/users/kmohrman/from_evourlio/anriosta_LST_samples_CMSSW_14_1_0_pre0/step2_21034.1_100Events_CP03.root',
     ),
-    #duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
+    duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -152,16 +158,6 @@ process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
     splitLevel = cms.untracked.int32(0)
 )
 
-process.DQMoutput = cms.OutputModule("DQMRootOutputModule",
-    dataset = cms.untracked.PSet(
-        dataTier = cms.untracked.string('DQMIO'),
-        filterName = cms.untracked.string('')
-    ),
-    fileName = cms.untracked.string('step3_RAW2DIGI_RECO_inDQM.root'),
-    outputCommands = process.DQMEventContent.outputCommands,
-    splitLevel = cms.untracked.int32(0)
-)
-
 # Additional output definition
 
 # Other statements
@@ -171,11 +167,11 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T21', ''
 # Path and EndPath definitions
 process.raw2digi_step = cms.Path(process.RawToDigi)
 process.reconstruction_step = cms.Path(process.reconstruction_trackingOnly)
+process.endjob_step = cms.EndPath(process.endOfProcess)
 process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
-process.DQMoutput_step = cms.EndPath(process.DQMoutput)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.raw2digi_step,process.reconstruction_step,process.RECOSIMoutput_step,process.DQMoutput_step)
+process.schedule = cms.Schedule(process.raw2digi_step,process.reconstruction_step,process.endjob_step,process.RECOSIMoutput_step)
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
 
